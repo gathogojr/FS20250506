@@ -20,12 +20,18 @@ builder.Services.AddControllers().AddOData(
             model: modelBuilder.GetEdmModel());
     });
 
+// Configure swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Configure the DbContext
 builder.Services.AddDbContext<FsDbContext>(
     options => options.UseInMemoryDatabase("FsDb"));
 
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseRouting();
 app.MapControllers();
 
