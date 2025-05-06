@@ -35,8 +35,8 @@ builder.Services.AddDbContext<FsDbContext>(
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwagger(); // Generates the Swagger JSON
+app.UseSwaggerUI(); // Serves the Swagger UI
 app.UseRouting();
 app.MapControllers();
 

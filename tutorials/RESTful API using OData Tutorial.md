@@ -112,16 +112,16 @@ Let's add the EF Core NuGet packages to the project.
 
 In the Visual Studio **Package Manager Console**:
 
-```
-Install-Package Microsoft.EntityFrameworkCore.InMemory
+```powershell
+Install-Package Microsoft.EntityFrameworkCore.InMemory -Version 8.0.4
 ```
 
 ### Add `Microsoft.EntityFrameworkCore.InMemory` using .NET Core CLI
 
 **NOTE:** You would need to switch directory to the _**FS20250506**_ project directory to execute the .NET Core CLI commands.
 
-```
-dotnet add package Microsoft.EntityFrameworkCore.InMemory
+```bash
+dotnet add package Microsoft.EntityFrameworkCore.InMemory --version 8.0.4
 ```
 
 ## Adding a database context
@@ -305,14 +305,14 @@ Let's add the EF Core NuGet packages to the project.
 
 In the Visual Studio **Package Manager Console**:
 
-```
-Install-Package Microsoft.AspNetCore.OData
+```powershell
+Install-Package Microsoft.AspNetCore.OData -Version 8.2.5
 ```
 
 ### Add `Microsoft.EntityFrameworkCore.InMemory` using .NET Core CLI
 
-```
-dotnet add package Microsoft.AspNetCore.OData
+```bash
+dotnet add package Microsoft.AspNetCore.OData --version 8.2.5
 ```
 
 ## Building the Edm model and adding essential OData services
@@ -1104,4 +1104,42 @@ GET http://localhost:5074/Customers?$expand=Id,Name
 GET http://localhost:5074/Orders?$orderby=Amount desc&$top=2
 GET http://localhost:5074/Orders?$orderby=Amount desc&$skip=2&$top=2
 GET http://localhost:5074/Orders?$apply=aggregate(Amount with average as AverageAmount)
+```
+
+## Enabling Swagger UI
+Enabling Swagger UI significantly enhances the development and testing experience by providing a user-friendly, interactive interface for exploring and invoking your API's endpoints. Swagger UI is part of the OpenAPI ecosystem and automatically generates live documentation based on your API's metadata.
+
+To enable Swagger UI in an ASP.NET Core OData project, start by installing the `Swashbuckle.AspNetCore` NuGet package:
+
+### Step 1: Install `Swashbuckle.AspNetCore`
+
+#### Using Visual Studio **Package Manager Console**:
+```powershell
+Install-Package Swashbuckle.AspNetCore -Version 8.1.1
+```
+
+#### Using .NET CLI
+```bash
+dotnet add package Swashbuckle.AspNetCore --version 8.1.1
+```
+
+### Step 2: Configure Swagger services
+Add the following lines in _**Program.cs**_, immediately after the `builder.Services.AddControllers().AddOData(...)` call:
+
+```csharp
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+```
+
+### Step 3: Enable Swagger middleware
+In the HTTP request pipeline configuration, add the following lines **before** `app.UseRouting()`:
+```csharp
+app.UseSwagger(); // Generates the Swagger JSON
+app.UseSwaggerUI(); // Serves the Swagger UI
+```
+
+### Step 4: Access Swagger UI
+With the above configuration in place, you can browse your API's documentation and test endpoints by navigating to:
+```
+GET http://localhost:5074/swagger
 ```
