@@ -15,9 +15,14 @@ modelBuilder.EntitySet<Order>("Orders");
 builder.Services.AddControllers().AddOData(
     options =>
     {
+        var model = modelBuilder.GetEdmModel();
+
         options.EnableQueryFeatures();
         options.AddRouteComponents(
-            model: modelBuilder.GetEdmModel());
+            model: model);
+        options.AddRouteComponents(
+            routePrefix: "v2",
+            model: model);
     });
 
 // Configure swagger
